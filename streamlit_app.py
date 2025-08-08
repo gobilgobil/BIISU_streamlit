@@ -3,9 +3,12 @@ import base64
 from PIL import Image
 from pathlib import Path
 
+# Set page layout to wide
+st.set_page_config(layout="wide")
+
 def zoomed_scrollable_image(image_path, zoom_factor, container_height):
     """
-    Displays a zoomed and scrollable image in a container.
+    Displays a zoomed and scrollable image in a container, maintaining aspect ratio.
 
     Args:
     image_path (str or Path): The path to the image file.
@@ -15,11 +18,10 @@ def zoomed_scrollable_image(image_path, zoom_factor, container_height):
     try:
         # Open the image to get its original dimensions
         img = Image.open(image_path)
-        original_width, original_height = img.size
+        original_width, _ = img.size
 
-        # Calculate zoomed dimensions
+        # Calculate zoomed width, height will be auto to maintain aspect ratio
         zoomed_width = original_width * zoom_factor
-        zoomed_height = original_height * zoom_factor
 
         # Read image file and encode it in base64
         with open(image_path, "rb") as f:
@@ -29,10 +31,11 @@ def zoomed_scrollable_image(image_path, zoom_factor, container_height):
         image_ext = Path(image_path).suffix.lstrip('.')
 
         # Create the HTML for the scrollable container and the zoomed image
+        # Set only the width and let height be 'auto' to maintain aspect ratio
         html_content = f"""
         <div style="overflow: scroll; height: {container_height}px; border: 1px solid #ddd;">
             <img src="data:image/{image_ext};base64,{encoded_image}" 
-                 style="width: {zoomed_width}px; height: {zoomed_height}px; display: block;">
+                 style="width: {zoomed_width}px; height: auto; display: block;">
         </div>
         """
         st.markdown(html_content, unsafe_allow_html=True)
@@ -67,4 +70,3 @@ with col2:
     # Make sure the image is in the same folder as your script.
     image_file = 'teste.png'
     zoomed_scrollable_image(image_file, zoom_factor=4, container_height=600)
-
