@@ -13,16 +13,16 @@ def zoomed_scrollable_image(image_path, zoom_factor):
     Argumentos:
     image_path (str ou Path): O caminho para o arquivo de imagem.
     zoom_factor (int): O fator pelo qual ampliar a imagem.
-    container_height (int): A altura do contêiner rolável em pixels.
     """
     try:
         # Abre a imagem para obter suas dimensões originais
         img = Image.open(image_path)
         original_width, original_height = img.size
 
-        # Calcula a largura com zoom, a altura será automática para manter a proporção
+        # Calcula as dimensões com zoom, mantendo a proporção
         zoomed_width = original_width * zoom_factor
         zoomed_height =  original_height * zoom_factor
+        
         # Lê o arquivo de imagem e o codifica em base64
         with open(image_path, "rb") as f:
             image_bytes = f.read()
@@ -30,10 +30,10 @@ def zoomed_scrollable_image(image_path, zoom_factor):
         encoded_image = base64.b64encode(image_bytes).decode()
         image_ext = Path(image_path).suffix.lstrip('.')
 
-        # Cria o HTML para o contêiner rolável e a imagem com zoom
-        # Define apenas a largura e deixa a altura como 'auto' para manter a proporção
+        # Cria o HTML para o contêiner rolável e a imagem com zoom.
+        # 'overflow: auto' adiciona barras de rolagem horizontal e vertical conforme necessário.
         html_content = f"""
-        <div style="overflow: scroll; height: {600}px; border: 1px solid #ddd;">
+        <div style="overflow: auto; height: 600px; border: 1px solid #ddd;">
             <img src="data:image/{image_ext};base64,{encoded_image}" 
              style="width: {zoomed_width}px; height: {zoomed_height}px; display: block;">
         </div>
@@ -70,4 +70,3 @@ with col2:
     # Certifique-se de que a imagem esteja na mesma pasta que o seu script.
     image_file = 'teste.png'
     zoomed_scrollable_image(image_file, zoom_factor=3)
-
