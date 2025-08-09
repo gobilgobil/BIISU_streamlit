@@ -33,7 +33,7 @@ def zoomed_scrollable_image(image_path, zoom_factor):
         # Cria o HTML para o contêiner rolável e a imagem com zoom
         # Define apenas a largura e deixa a altura como 'auto' para manter a proporção
         html_content = f"""
-        <div style="overflow: scroll; height: {original_height/4}px; border: 1px solid #ddd;">
+        <div style="overflow: scroll; height: {600}px; border: 1px solid #ddd;">
             <img src="data:image/{image_ext};base64,{encoded_image}" 
              style="width: {zoomed_width}px; height: {zoomed_height}px; display: block;">
         </div>
