@@ -6,23 +6,14 @@ from pathlib import Path
 # Define o layout da página como 'wide' (largo)
 st.set_page_config(layout="wide")
 
-def zoomed_scrollable_image(image_path, zoom_factor):
+def scrollable_image(image_path):
     """
-    Exibe uma imagem com zoom e rolável em um contêiner, mantendo a proporção.
+    Exibe uma imagem em um contêiner rolável.
 
     Argumentos:
     image_path (str ou Path): O caminho para o arquivo de imagem.
-    zoom_factor (float): O fator pelo qual ampliar a imagem.
     """
     try:
-        # Abre a imagem para obter suas dimensões originais
-        img = Image.open(image_path)
-        original_width, original_height = img.size
-
-        # Calcula as dimensões com zoom, mantendo a proporção
-        zoomed_width = original_width * zoom_factor
-        zoomed_height = original_height * zoom_factor
-        
         # Lê o arquivo de imagem e o codifica em base64
         with open(image_path, "rb") as f:
             image_bytes = f.read()
@@ -30,12 +21,13 @@ def zoomed_scrollable_image(image_path, zoom_factor):
         encoded_image = base64.b64encode(image_bytes).decode()
         image_ext = Path(image_path).suffix.lstrip('.')
 
-        # Cria o HTML para o contêiner rolável e a imagem com zoom.
+        # Cria o HTML para o contêiner rolável e a imagem.
         # 'overflow: auto' adiciona barras de rolagem horizontal e vertical conforme necessário.
+        # A imagem é exibida com 100% da largura do contêiner.
         html_content = f"""
         <div style="overflow: auto; height: 600px; border: 1px solid #ddd;">
             <img src="data:image/{image_ext};base64,{encoded_image}" 
-             style="width: {zoomed_width}px; height: {zoomed_height}px; display: block; max-width: none;">
+             style="width: 100%; height: auto; display: block;">
         </div>
         """
         st.markdown(html_content, unsafe_allow_html=True)
@@ -56,9 +48,8 @@ with col1:
     st.write(
         "Esta é a área do painel de controle. Todos os textos e widgets vão aqui."
     )
-    zoom_level = st.slider("Selecione o nível de zoom", 1.0, 10.0, 3.0, 0.1)
     st.write(
-        "A imagem à direita está com zoom e colocada em uma janela rolável."
+        "A imagem à direita está colocada em uma janela rolável."
     )
     st.write(
         "Para ajuda e inspiração, acesse [docs.streamlit.io](https://docs.streamlit.io/)."
@@ -70,4 +61,5 @@ with col2:
     # Você pode substituir 'teste.png' pelo seu arquivo de imagem.
     # Certifique-se de que a imagem esteja na mesma pasta que o seu script.
     image_file = 'teste.png'
-    zoomed_scrollable_image(image_file, zoom_factor=zoom_level)
+    scrollable_image(image_file)
+
