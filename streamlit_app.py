@@ -27,7 +27,7 @@ def scrollable_image(image_path):
         html_content = f"""
         <div style="overflow: auto; height: 600px; border: 1px solid #ddd;">
             <img src="data:image/{image_ext};base64,{encoded_image}" 
-             style="width: 100%; height: auto; display: block;">
+             style="width: 200%; height: 200%; display: block;">
         </div>
         """
         st.markdown(html_content, unsafe_allow_html=True)
